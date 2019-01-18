@@ -16,12 +16,8 @@ def gini_simpson_dict(key_subset, sig_dict):
     max = len(key_subset)
 
     for key, value in p_dict.items():
-        print key, value
         p_dict[key] = (value/max)**2
-
-
-    print len(p_dict)
-
+        # print key, value
     return p_dict
 
 def gini_simpson_value(gini_simps_dict):

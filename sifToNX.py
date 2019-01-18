@@ -9,6 +9,4 @@ def sifToNX(graph_file):
         netconv.importSIF(n, graph_file)
         G = nx.Graph()
         netconv.netconv2NX(n,G)
-
         return G
-
