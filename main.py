@@ -43,7 +43,7 @@ def multi_ginisimpson(iterations, components, dict):
     avg_value = 0.0
     min = 100.0
 
-    print components
+    # print components
     for i in range(0, iterations):
 
         rand_sample = sample_from_components(components)
@@ -54,8 +54,8 @@ def multi_ginisimpson(iterations, components, dict):
 
         if len(ginisimps_dict.keys()) < min:
             min = len(ginisimps_dict.keys())
-            print min
-            print rand_sample
+            # print min
+            # print rand_sample
             # print ginisimps_dict.keys()
 
     # print min
@@ -66,16 +66,17 @@ def multi_ginisimpson(iterations, components, dict):
 
 def main():
 
-    ssn_file = './examples/ssn_transIII_n50.sif'
+    ssn_file = './examples/ssn_transIII_n50.gml'
     csn_file = './examples/csn_transIII_n41.sif'
-    # ssn_file = './examples/ssn_SDR_n50.sif'
+    # ssn_file = './examples/ssn_SDR_n50.gml'
     # csn_file = './examples/csn_SDR_n57.sif'
 
 
     tab_file = './transaminases.tab'
     # tab_file = './STR_143_annotation.tab'
 
-    ssn_graph = sifToNX(ssn_file)
+    # ssn_graph = sifToNX(ssn_file)
+    ssn_graph = nx.read_gml(ssn_file)
     csn_graph = sifToNX(csn_file)
 
     uniprot_EC = uniprot_EC_dict(tab_file)
