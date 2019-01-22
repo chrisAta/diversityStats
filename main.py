@@ -3,6 +3,7 @@ import networkx as nx
 from sifToNX import sifToNX
 from gini_simpson import gini_simpson_dict, gini_simpson_value
 from random import choice, sample
+import max_min_diversity
 
 def uniprot_EC_dict(tab_file):
 
@@ -33,31 +34,47 @@ def sample_from_components(components, num_comp):
             # print temp_entry
             temp_list += [temp_entry]
 
-    # print temp_list
     return temp_list
 
-def multi_ginisimpson(iterations, components, dict):
+def sample_from_components_cliques(components, num_comp):
+
+    temp_list = []
+
+    for comp in components:
+
+        max_clique = max(list(nx.find_cliques(comp)))
+        # print comp.nodes()
+        # print max_clique
+        temp_list += [choice(max_clique)]
+        # print temp_list
+        # print comp.nodes()
+    # print temp_list
+    # print len(temp_list)
+
+    return temp_list
+
+def multi_ginisimpson(iterations, components, dict, head, mat, graph=None):
 
     avg_coverage = 0.0
     avg_value = 0.0
-    min = 100.0
-    ec_num = len(set(dict.values()))*2/3
+    ec_num = len(set(dict.values())) / 2
     # ec_num = 50
 
-    # print components
-    for i in range(0, iterations):
 
-        rand_sample = sample_from_components(components, ec_num)
+    for i in range(0, iterations):
+        # print i
+        # rand_sample = sample_from_components(components, ec_num)
+        # rand_sample = sample_from_components_cliques(components, ec_num)
+
+        rand_sample = max_min_diversity.compute_diverse_set(mat, head, ec_num)
+        # print rand_sample
         ginisimps_dict = gini_simpson_dict(rand_sample, dict)
         ginisimps_value = gini_simpson_value(ginisimps_dict)
         avg_coverage += len(ginisimps_dict.keys())
         avg_value += ginisimps_value
 
-        if len(ginisimps_dict.keys()) < min:
-            min = len(ginisimps_dict.keys())
-            # print min
-            # print rand_sample
-            # print ginisimps_dict.keys()
+        # components = nx.connected_component_subgraphs(graph)
+
 
     # print min
 
@@ -71,7 +88,6 @@ def get_edgeless_nodes(components):
     count = 0
 
     for comp in components:
-
         if len(comp) == 1:
             count += 1
 
@@ -94,15 +110,17 @@ def main():
 
     uniprot_EC = uniprot_EC_dict(tab_file)
     ec_num = len(set(uniprot_EC.values()))
-    iterations = 100000
+    iterations = 1
 
     print "Calculating SSN Component Count.."
     ssn_components = list(nx.connected_components(ssn_graph))
+    ssn_components_graphs = nx.connected_component_subgraphs(ssn_graph)
     ssn_comp_num = nx.number_connected_components(ssn_graph)
     print "SSN Component Count: " + str(ssn_comp_num) + '\n'
 
     print "Calculating CSN Component Count.."
     csn_components = list(nx.connected_components(csn_graph))
+    csn_components_graphs = nx.connected_component_subgraphs(csn_graph)
     csn_comp_num = nx.number_connected_components(csn_graph)
     print "CSN Component Count: " + str(csn_comp_num) + '\n'
 
@@ -114,14 +132,16 @@ def main():
     csn_edgeless = get_edgeless_nodes(csn_components)
     print "CSN Edgeless Nodes Count: " + str(csn_edgeless) + '\n'
 
-
-
-
     print "Calculating SSN Average EC Coverage and Gini-Simpson Index for " \
                             + str(iterations) \
                             + " iterations of Component Sampling.."
 
-    ssn_avg_coverage, ssn_avg_ginisimpson = multi_ginisimpson(iterations, ssn_components, uniprot_EC)
+
+
+    ssn_avg_coverage, ssn_avg_ginisimpson = multi_ginisimpson(iterations, ssn_components, uniprot_EC, './new_ssn_headings.json', './new_ssn_identities.npy')
+    # ssn_avg_coverage, ssn_avg_ginisimpson = multi_ginisimpson(iterations, ssn_components_graphs, uniprot_EC, ssn_graph)
+
+
 
     print "SSN Average EC Coverage: " + str(ssn_avg_coverage) + "\n"
     print "SSN Average Gini-Simpson Index: " + str(ssn_avg_ginisimpson) + "\n"
@@ -131,7 +151,8 @@ def main():
                             + str(iterations) \
                             + " iterations of Component Sampling.."
 
-    csn_avg_coverage, csn_avg_ginisimpson = multi_ginisimpson(iterations, csn_components, uniprot_EC)
+    csn_avg_coverage, csn_avg_ginisimpson = multi_ginisimpson(iterations, csn_components, uniprot_EC, './new_csn_headings.json', './new_csn_identities.npy')
+    # csn_avg_coverage, csn_avg_ginisimpson = multi_ginisimpson(iterations, csn_components_graphs, uniprot_EC, csn_graph)
 
     print "CSN Average EC Coverage: " + str(csn_avg_coverage) + "\n"
     print "CSN Average Gini-Simpson Index: " + str(csn_avg_ginisimpson) + "\n"
