@@ -3,12 +3,12 @@ import numpy as np
 import json
 from data_prep import initialise_headings, initialise_matrix
 
-mat_path = './temp_csn_identities.npy'
-head_path = './temp_csn_headings.json'
-filter_list_path = './transIII_filter_list.txt'
+mat_path = './sdr142_csn_identities.npy'
+head_path = './sdr142_csn_headings.json'
+filter_list_path = './sdr142_filter_list.txt'
 
-new_mat_path = './new_csn_identities.npy'
-new_head_path = './new_csn_headings.json'
+new_mat_path = './newsdr142_csn_identities.npy'
+new_head_path = './newsdr142_csn_headings.json'
 
 mat = initialise_matrix(mat_path)
 head = initialise_headings(head_path)
@@ -17,7 +17,7 @@ fr = open(filter_list_path, 'r')
 filter_list = fr.readlines()
 filter_list = list(set([line.strip() for line in filter_list]))
 
-# head.revers
+
 print filter_list
 filter_indices = [head.values().index(x) for x in filter_list]
 print filter_indices
