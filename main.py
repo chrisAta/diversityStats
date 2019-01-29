@@ -83,17 +83,17 @@ def multi_ginisimpson(iterations, components, dict, head, mat, graph=None):
     max_coverage = 0.0
     avg_value = 0.0
     max_value = 0.0
-    ec_num = len(set(dict.values())) * 2 / 3
-    # ec_num = 40
+    ec_num = len(set(dict.values())) / 2
+    # ec_num = 50
     # ec_num = len(components)
     components = [comp for comp in components if len(comp) > 1]
 
     for i in range(0, iterations):
         # print i
-        rand_sample = sample_from_components(components, ec_num)
+        # rand_sample = sample_from_components(components, ec_num)
         # rand_sample = sample_from_components_cliques(components, ec_num)
 
-        # rand_sample = max_min_diversity.compute_diverse_set(mat, head, ec_num)
+        rand_sample = max_min_diversity.compute_diverse_set(mat, head, ec_num)
         # print sorted(rand_sample)
         ginisimps_dict = gini_simpson_dict(rand_sample, dict)
         ginisimps_value = gini_simpson_value(ginisimps_dict)
@@ -175,12 +175,11 @@ def ec_analysis(id_to_ec, ec_to_ids, graph):
     print "\nEDGES: "
     ec_edges(ec_to_ids, graph)
 
-
-
-
-
-
     # print sorted(graph.nodes())
+
+def rand_index(graph1, graph2):
+
+    print list(graph1.edges())
 
 
 def main():
@@ -200,7 +199,7 @@ def main():
 
     uniprot_EC, ec_to_ids = uniprot_EC_dict(tab_file)
     ec_num = len(set(uniprot_EC.values()))
-    iterations = 10000
+    iterations = 1
 
     print "Calculating SSN Component Count.."
     ssn_components = list(nx.connected_components(ssn_graph))
@@ -264,6 +263,7 @@ def main():
     print "CSN EC Analysis: "
     ec_analysis(uniprot_EC, ec_to_ids, csn_graph)
 
+    # rand_index(ssn_graph, csn_graph)
 
 
 
