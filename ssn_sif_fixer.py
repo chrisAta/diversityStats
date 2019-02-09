@@ -1,7 +1,7 @@
 
 
-fr = open('./examples/ssn_SDR_n50.sif', 'r')
-fw = open('./examples/new_ssn_SDR_n50.sif', 'w')
+fr = open('./STR_TR40.sif', 'r')
+fw = open('./examples/new_ssn_SDR_n40.sif', 'w')
 
 dict = {}
 
