@@ -1,5 +1,5 @@
 
-def uniprot_ec_dict(tab_file, SDR= False):
+def uniprot_ec_dict(tab_file, SDR=1):
 
     fr = open(tab_file, 'r')
     fr.next()
@@ -12,7 +12,7 @@ def uniprot_ec_dict(tab_file, SDR= False):
         temp_array = line.split('\t')
         id = temp_array[0]
 
-        if SDR:
+        if SDR == 2:
             ec = temp_array[-1]
         else:
             ec = temp_array[3]
