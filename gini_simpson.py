@@ -6,6 +6,7 @@ def gini_simpson_dict(key_subset, sig_dict):
 
     for key in key_subset:
 
+        # print key_subset
         sig = str(sig_dict[key])
 
         if sig in p_dict.keys():
