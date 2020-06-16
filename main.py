@@ -236,34 +236,35 @@ def main():
 
     # ssn_file = './examples/networks/ssn_transIII_n50.gml'
     # csn_file = './examples/networks/csn_transIII_n41.sif'
-    ssn_file = './examples/networks/ssn_SDR_n50.gml'
-    csn_file = './examples/networks/csn_SDR_n57.sif'
+    # ssn_file = './examples/networks/ssn_SDR_n50.gml'
+    # csn_file = './examples/networks/csn_SDR_n57.sif'
 
     # ssn_file = './examples/networks/ssn_SDR_n40.gml'
     # csn_file = './examples/networks/coev_graph_0_41.sif'
 
-    # ssn_file = './examples/networks/ssn_transIII_n40.gml'
-    # csn_file = './examples/networks/coev_graph_0_32.sif'
+    ssn_file = './examples/networks/ssn_transIII_n40.gml'
+    csn_file = './examples/networks/coev_graph_0_32.sif'
 
 
 
-    # tab_file = './examples/tables/transaminases_edited.tab.csv'
-    tab_file = './examples/tables/STR_143_annotation_edited.csv'
+    tab_file = './examples/tables/transaminases_edited.tab.csv'
+    # tab_file = './examples/tables/STR_143_annotation_edited.csv'
 
     # ssn_graph = sifToNX(ssn_file)
     ssn_graph = nx.read_gml(ssn_file)
     csn_graph = sifToNX(csn_file)
 
-    uniprot_EC, ec_to_ids = uniprot_ec_dict(tab_file, 2)
+    uniprot_EC, ec_to_ids = uniprot_ec_dict(tab_file, 1)
 
     ec_num = len(set(uniprot_EC.values()))
+    print(set(uniprot_EC.values()))
     iterations = 10000
 
     print "Calculating SSN Component Count.."
     ssn_components = list(nx.connected_components(ssn_graph))
     ssn_components_graphs = nx.connected_component_subgraphs(ssn_graph)
     ssn_comp_num = nx.number_connected_components(ssn_graph)
-    # print "SSN Component Count: " + str(ssn_comp_num) + '\n'
+    print "SSN Component Count: " + str(ssn_comp_num) + '\n'
     #
     # print "Calculating CSN Component Count.."
     csn_components = list(nx.connected_components(csn_graph))
@@ -271,55 +272,55 @@ def main():
     csn_comp_num = nx.number_connected_components(csn_graph)
     # print "CSN Component Count: " + str(csn_comp_num) + '\n'
     #
-    # print "Calculating SSN Edgeless Nodes Count.."
-    # ssn_edgeless = get_edgeless_nodes(ssn_components)
-    # print "SSN Edgeless Nodes Count: " + str(ssn_edgeless) + '\n'
+    print "Calculating SSN Edgeless Nodes Count.."
+    ssn_edgeless = get_edgeless_nodes(ssn_components)
+    print "SSN Edgeless Nodes Count: " + str(ssn_edgeless) + '\n'
     #
-    # print "Calculating CSN Edgeless Nodes Count.."
-    # csn_edgeless = get_edgeless_nodes(csn_components)
-    # print "CSN Edgeless Nodes Count: " + str(csn_edgeless) + '\n'
+    print "Calculating CSN Edgeless Nodes Count.."
+    csn_edgeless = get_edgeless_nodes(csn_components)
+    print "CSN Edgeless Nodes Count: " + str(csn_edgeless) + '\n'
     # #
-    # print "Calculating SSN Average EC Coverage and Gini-Simpson Index for " \
-    #                         + str(iterations) \
-    #                         + " iterations of Component Sampling.."
+    print "Calculating SSN Average EC Coverage and Gini-Simpson Index for " \
+                            + str(iterations) \
+                            + " iterations of Component Sampling.."
     #
     #
     #
     # ssn_avg_coverage, ssn_avg_ginisimpson = multi_ginisimpson(iterations, ssn_components, uniprot_EC, './examples/max_min/trans241_ssn_headings.json', './examples/max_min/trans241_ssn_identities.npy', 24)
-    # # ssn_avg_coverage, ssn_avg_ginisimpson = multi_ginisimpson(iterations, ssn_components, uniprot_EC, './newtrans241_ssn_headings.json', './newtrans241_ssn_identities.npy')
-    #
+    ssn_avg_coverage, ssn_avg_ginisimpson = multi_ginisimpson(iterations, ssn_components, uniprot_EC, './examples/max_min/newtrans241_ssn_headings.json', './examples/max_min/newtrans241_ssn_identities.npy', 70)
+
     # ssn_avg_coverage, ssn_avg_ginisimpson = multi_ginisimpson(iterations, ssn_components, uniprot_EC, './examples/max_min/sdr142_ssn_headings.json', './examples/max_min/sdr142_ssn_identities.npy', ec_num)
     # # ssn_avg_coverage, ssn_avg_ginisimpson = multi_ginisimpson(iterations, ssn_components, uniprot_EC, './newsdr142_ssn_headings.json', './newsdr142_ssn_identities.npy')
     #
     # #
     # #
-    # print "SSN Average EC Coverage: " + str(ssn_avg_coverage) + "\n"
-    # print "SSN Average Gini-Simpson Index: " + str(ssn_avg_ginisimpson) + "\n"
+    print "SSN Average EC Coverage: " + str(ssn_avg_coverage) + "\n"
+    print "SSN Average Gini-Simpson Index: " + str(ssn_avg_ginisimpson) + "\n"
     # #
     # # #
-    # print "Calculating CSN Average EC Coverage and Gini-Simpson Index for " \
-    #                         + str(iterations) \
-    #                         + " iterations of Component Sampling.."
+    print "Calculating CSN Average EC Coverage and Gini-Simpson Index for " \
+                            + str(iterations) \
+                            + " iterations of Component Sampling.."
     #
     # csn_avg_coverage, csn_avg_ginisimpson = multi_ginisimpson(iterations, csn_components, uniprot_EC, './examples/max_min/trans241_csn_headings.json', './examples/max_min/trans241_csn_identities.npy', 24)
-    # csn_avg_coverage, csn_avg_ginisimpson = multi_ginisimpson(iterations, csn_components, uniprot_EC, './newtrans241_csn_headings.json', './newtrans241_csn_identities.npy')
+    csn_avg_coverage, csn_avg_ginisimpson = multi_ginisimpson(iterations, csn_components, uniprot_EC, './examples/max_min/newtrans241_csn_headings.json', './examples/max_min/newtrans241_csn_identities.npy', 24)
 
     # csn_avg_coverage, csn_avg_ginisimpson = multi_ginisimpson(iterations, csn_components, uniprot_EC, './examples/max_min/sdr142_csn_headings.json', './examples/max_min/sdr142_csn_identities.npy', ec_num)
     # csn_avg_coverage, csn_avg_ginisimpson = multi_ginisimpson(iterations, csn_components, uniprot_EC, './newsdr142_csn_headings.json', './newsdr142_csn_identities.npy')
 
 
 
-    # print "CSN Average EC Coverage: " + str(csn_avg_coverage) + "\n"
-    # print "CSN Average Gini-Simpson Index: " + str(csn_avg_ginisimpson) + "\n"
+    print "CSN Average EC Coverage: " + str(csn_avg_coverage) + "\n"
+    print "CSN Average Gini-Simpson Index: " + str(csn_avg_ginisimpson) + "\n"
     #
 
     print "Total EC Numbers: " + str(ec_num)
 
-    print "SSN EC Analysis: "
-    ec_analysis(uniprot_EC, ec_to_ids, ssn_graph)
-
-    print "CSN EC Analysis: "
-    ec_analysis(uniprot_EC, ec_to_ids, csn_graph)
+    # print "SSN EC Analysis: "
+    # ec_analysis(uniprot_EC, ec_to_ids, ssn_graph)
+    #
+    # print "CSN EC Analysis: "
+    # ec_analysis(uniprot_EC, ec_to_ids, csn_graph)
 
     # rand_index(ssn_graph, csn_graph)
 
@@ -327,7 +328,7 @@ def main():
     # iterate_subset_size(iterations, csn_components, uniprot_EC, "./examples/max_min/sdr142_csn_headings.json", './examples/max_min/sdr142_csn_identities.npy')
 
     # iterate_subset_size(iterations, csn_components, uniprot_EC, "./examples/max_min/trans241_csn_headings.json", './examples/max_min/trans241_csn_identities.npy')
-
+    #
     # iterate_subset_size(iterations, ssn_components, uniprot_EC, "./examples/max_min/trans241_ssn_headings.json", './examples/max_min/trans241_ssn_identities.npy')
 
 
