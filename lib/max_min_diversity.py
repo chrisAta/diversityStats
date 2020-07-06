@@ -1,5 +1,5 @@
 import numpy as np
-import data_prep
+from .data_prep import initialise_matrix, initialise_headings, get_matrix_min
 
 def greedy_min_max_alg(dist, headings, subset, k, stochastic=False):
 
@@ -45,11 +45,11 @@ def compute_diverse_subset(dist_file, heading_file, k, stochastic=False):
 
     subset = []
 
-    dist = data_prep.initialise_matrix(dist_file)
+    dist = initialise_matrix(dist_file)
 
-    headings = data_prep.initialise_headings(heading_file)
+    headings = initialise_headings(heading_file)
 
-    min = data_prep.get_matrix_min(dist)
+    min = get_matrix_min(dist)
 
     subset += [min[0], min[1]]
 
