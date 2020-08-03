@@ -1,7 +1,10 @@
 import numpy as np
+from copy import copy, deepcopy
 from .data_prep import initialise_matrix, initialise_headings, get_matrix_min
 
 def greedy_min_max_alg(dist, headings, subset, k, stochastic=False):
+
+        solutions = []
 
         while len(subset) < k:
 
@@ -12,6 +15,9 @@ def greedy_min_max_alg(dist, headings, subset, k, stochastic=False):
 
                 if i in subset:
                     continue
+
+                if len(subset) == k:
+                    break
 
                 rand = np.random.randint(0,10000)
 
@@ -34,10 +40,12 @@ def greedy_min_max_alg(dist, headings, subset, k, stochastic=False):
 
             # print "ADDED %s" % (headings[min_ind])
 
-            subset += [min_ind]
-            subset = list(set(subset))
+                if min_ind not in subset:
+                    subset += [min_ind]
+                # subset = list(set(subset))
+                    solutions += [deepcopy(subset)]
 
-        return subset
+        return subset, solutions
 
 
 
@@ -57,7 +65,7 @@ def compute_diverse_subset(dist_file, heading_file, k, stochastic=False):
     #
     # subset += [np.random.randint(0,241)]
 
-    subset = greedy_min_max_alg(dist, headings, subset, k, stochastic)
+    subset, solutions = greedy_min_max_alg(dist, headings, subset, k, stochastic)
 
     binary = []
 
@@ -67,8 +75,13 @@ def compute_diverse_subset(dist_file, heading_file, k, stochastic=False):
         else:
             binary += [0]
 
+    final_subset = []
+
+    for sol in solutions:
+        final_subset += [sorted([headings[x] for x in sol])]
+
     subset = sorted([headings[x] for x in subset])
 
     # print subset
 
-    return subset, binary
+    return subset, binary, final_subset

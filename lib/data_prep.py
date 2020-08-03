@@ -27,4 +27,4 @@ def get_matrix_min(dist):
 
     min_arr = np.where(dist == np.nanmin(dist))
 
-    return min_arr[0]
+    return list(set(min_arr[0]))
