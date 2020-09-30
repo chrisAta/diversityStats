@@ -84,4 +84,4 @@ def compute_diverse_subset(dist_file, heading_file, k, stochastic=False):
 
     # print subset
 
-    return subset, binary, final_subset
+    return subset, binary, final_subset, dist
