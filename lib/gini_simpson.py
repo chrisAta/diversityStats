@@ -4,22 +4,29 @@ def gini_simpson_dict(key_subset, sig_dict):
 
     p_dict = {}
 
+    count = 0
+
     for key in key_subset:
 
-        # print key_subset
-        sig = str(sig_dict[key])
+        temp_sig = str(sig_dict[key])
 
-        if sig in p_dict.keys():
-            p_dict[sig] += 1.0
-        else:
-            p_dict[sig] = 1.0
+        sig_lst = temp_sig.split('; ')
 
-    max = len(key_subset)
+        for sig in sig_lst:
+            if sig in p_dict.keys():
+                p_dict[sig] += 1.0
+            else:
+                p_dict[sig] = 1.0
+
+            count += 1
+
+    max = count
 
     for key, value in p_dict.items():
         p_dict[key] = (value/max)**2
         # print key, value
     return p_dict
+
 
 def gini_simpson_value(gini_simps_dict):
 
